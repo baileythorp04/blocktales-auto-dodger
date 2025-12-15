@@ -1,6 +1,6 @@
 ### SETTINGS ###
-
-SAFETY_OFFSET = -3
+DOT_DELAY_OFFSET = -3 
+SAFETY_OFFSET = -3 + (-0) #(2 more for random code slowness)
 time_waiting_for_enemy_to_highlight = 4
 time_waiting_for_enemy_to_move = time_waiting_for_enemy_to_highlight + 10
 
@@ -31,7 +31,7 @@ SWORD_START_POS = (703, 745)
 SWORD_END_POS = (1216, 745)
 MENU_BALL_POS = (125,115)
 
-BARREL_TIMING = 91
+BARREL_TIMING = 90 #(CHANGED FROM 91)
 SINGLE_TIMING = 112
 TRIPLE_1_TIMING =  82
 TRIPLE_2_TIMING = 97

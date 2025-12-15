@@ -1,3 +1,6 @@
+i think the inconsistency is with dot delay, depending on how much else i have running on the pc
+
 do health bar detection to switch to/from triple dodge
-test that line detection works when going from prep -> barrel
 get the timings to work
+change delay based on enemy position
+do menuing
