@@ -7,6 +7,7 @@ import keyboard
 pyautogui.PAUSE = 0
 
 LOG_GRAY = (195, 200, 200)
+LOG_BACKGROUND = (45, 8, 45)
 HEALTH_YELLOW = (216, 164, 21) 
 HEALTH_YELLOW_DARK = () 
 HEALTH_YELLOW_DARKER = () 
@@ -20,6 +21,7 @@ LOG_DOT_POSES = ((468, 67),
 (468, 103),
 (468, 139),
 (468, 175))
+LOG_LINECHECK_POS = (727, 170)
 HEALTH_1_POS = (1210,648)
 HEALTH_2_POS = (1360,648)
 HEALTH_3_POS = (1505,648)
@@ -50,25 +52,50 @@ def time_has_passed(start_time, frames):
 
 class Dots:
     dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
+    line = LOG_BACKGROUND
+    has_4_dots = False
 
-    def reset():
-        dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
+    def reset(self):
+        self.dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
+        self.line = LOG_BACKGROUND
+        self.has_4_dots = False
 
 
     def check_for_dot_change(self):
-        for i in range(4):
-            new_color = pyautogui.pixel(*LOG_DOT_POSES[i])
-            if (self.dots[i] != new_color): #update each dot to the newest color
-                self.dots[i] = new_color
-                if (new_color == LOG_GRAY): 
-                    #separate into two logic trees: 4th dot is background color or not
-                    #detect 4th dot by: text disappears but dot is still white
+        #if the log is not full with 4 lines, check each one to see if it turned gray
+        if (not self.has_4_dots):
+            for i in range(4):
+                new_color = pyautogui.pixel(*LOG_DOT_POSES[i])
+                if (self.dots[i] != new_color): #update each dot to the newest color
+                    self.dots[i] = new_color
 
-                    if (i == 0):
-                        print("player's dot found")
-                    else:
-                        print("dot found")
-                        return True
+                    if (new_color == LOG_GRAY):
+                        if (i == 3):
+                            self.has_4_dots = True
+
+                        if (i == 0):
+                            print("player's dot found")
+                            return False
+                        else:
+                            print("dot found")
+                            return True
+        #else, only check the last dot
+        else:
+            new_dot_color = pyautogui.pixel(*LOG_DOT_POSES[3])
+            old_dot_color = self.dots[3]
+            self.dots[3] = new_dot_color
+
+            new_line_color = pyautogui.pixel(*LOG_LINECHECK_POS)
+            old_line_color = self.line
+            self.line = new_line_color
+
+            #if dot is gray AND:
+            #dot had just changed to gray OR line had just turned into background (line disappeared)
+            if (new_dot_color == LOG_GRAY and ((old_dot_color != LOG_GRAY) or (old_line_color != LOG_BACKGROUND and new_line_color == LOG_BACKGROUND))):
+                print("dot found")
+                return True
+
+
 
 class Dodged_State():
     start_time = 0
@@ -77,35 +104,37 @@ class Dodged_State():
 
 
     def enable(self):
-        start_time = time.time()
-        finished_barrel = False
-        finished_dodging = False
+        self.start_time = time.time()
+        self.finished_barrel = False
+        self.finished_dodging = False
 
 
 
     def disable(self):
-        finished_dodging = True
+        self.finished_dodging = True
 
 
     def do_dodge(self):
+        if (not self.finished_dodging):
 
-        if (not self.finished_barrel):
-            if (time_has_passed(self.start_time, BARREL_TIMING + DELAY_4 + safety_offset)):
-                dodged_barrel = True
-                print(f"dodge barrel preclick: {(time.time()-self.start_time)/0.03333}")
+            if (not self.finished_barrel):
+                barrel_dodge_time = BARREL_TIMING + DELAY_4 + safety_offset
+                if (time_has_passed(self.start_time, barrel_dodge_time)):
+                    dodged_barrel = True
+                    print(f"dodge barrel preclick: {(time.time()-self.start_time)/0.03333}")
+                    print(f"expected: {barrel_dodge_time}")
+                    pyautogui.leftClick()
+
+                    self.finished_barrel = True #after dodging barrel, dont do it again
+
+            single_dodge_time = SINGLE_TIMING + DELAY_4 + safety_offset
+            if (time_has_passed(self.start_time, single_dodge_time)):
+                dodged_single = True
+                print(f"dodge single preclick: {(time.time()-self.start_time)/0.03333}")
+                print(f"expected: {single_dodge_time}")
                 pyautogui.leftClick()
-                #print(f"dodge barrel : {(time.time()-self.start_time)/0.03333}")
 
-                self.finished_barrel = True #after dodging barrel, dont do it again
-
-
-        if (time_has_passed(self.start_time, SINGLE_TIMING + DELAY_4 + safety_offset)):
-            dodged_single = True
-            print(f"dodge single preclick: {(time.time()-self.start_time)/0.03333}")
-            pyautogui.leftClick()
-            #print(f"dodge single: {(time.time()-self.start_time)/0.03333}")
-
-            self.finished_dodging = True #after dodging single, stop dodging
+                self.finished_dodging = True #after dodging single, stop dodging
 
 def check_for_menu():
     return pyautogui.pixel(*MENU_BALL_POS) == MENU_BALL_PURPLE
@@ -114,7 +143,6 @@ def check_for_menu():
 def wait_for_player():
     print("press q to continue")
     keyboard.wait('q')
-    print("started looking for dot")
 
 
 
@@ -140,9 +168,13 @@ while True:
 
     if (check_for_menu()):
         print("menu open")
-        dots = Dots()
+        dots.reset()
         dodged_state.disable()
-        wait_for_player()
+
+        wait_for_player() #wait...
+
+        print("started looking for dot")
+
         
 
     if (dots.check_for_dot_change()):
