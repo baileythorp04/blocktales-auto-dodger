@@ -2,7 +2,7 @@
 SAFETY_OFFSET = -3 + (-2) + (-0.5)
 #-3 for being before the hit, -2 for dot delay, -0.5 for click delay
 time_waiting_for_enemy_to_highlight = 4
-time_waiting_for_enemy_to_move = time_waiting_for_enemy_to_highlight + 10
+ENEMY_MOVE_TIME = time_waiting_for_enemy_to_highlight + 10
 
 
 ### CONSTANTS ###
@@ -23,19 +23,14 @@ LOG_DOT_POSES = ((468, 67),
 (468, 139),
 (468, 175))
 LOG_LINECHECK_POS = (727, 170)
-HEALTH_1_POS = (1210,648)
-HEALTH_2_POS = (1360,648)
-HEALTH_3_POS = (1505,648)
-HEALTH_4_POS = (1640,648)
+HEALTH_POSES = ((1210,648), (1360,648), (1505,648), (1640,648))
 SWORD_START_POS = (703, 745)
 SWORD_END_POS = (1216, 745)
 MENU_BALL_POS = (125,115)
 
 BARREL_TIMING = 91
 SINGLE_TIMING = 112
-TRIPLE_1_TIMING =  82
-TRIPLE_2_TIMING = 97
-TRIPLE_3_TIMING = 109
+TRIPLE_TIMINGS = (82, 96, 109) #TODO CHANGED FROM 82, 97, 109
 
 WALK_DELAY_1 = 0
 WALK_DELAY_2 = 1

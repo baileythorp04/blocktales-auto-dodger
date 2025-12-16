@@ -29,13 +29,13 @@ try:
     menu_open = False
 
     dots = Dots()
-    dodged_state = Dodged_State()
+    dodger = Dodged_State()
 
 
     wait_for_player()
     while True:
         ### first, see if you need to dodge ###
-        dodged_state.do_dodge()
+        dodger.try_dodge()
 
 
         ### scan all pixels before logic ###
@@ -44,6 +44,8 @@ try:
             continue
         dots.scan_dots(frame)
         menu_open = check_for_menu(frame)
+        dodger.check_walk(frame)
+
 
         
         ### get time since last time screen was read ###
@@ -56,7 +58,7 @@ try:
         if (menu_open):
             print("menu open")
             dots.reset()
-            dodged_state.disable()
+            dodger.disable()
 
             wait_for_player() #wait...
 
@@ -66,7 +68,7 @@ try:
 
         if (dots.check_for_dot_change()):
             print("time started")
-            dodged_state.enable()
+            dodger.enable()
 
 
             
