@@ -1,5 +1,6 @@
 import time
 import keyboard
+import pyautogui
 from constants import *
 
 def time_has_passed(start_time, frames):
@@ -7,8 +8,8 @@ def time_has_passed(start_time, frames):
     return time.time() >= end_time
 
 
-def check_for_menu(img):
-    return img.pixel(*MENU_BALL_POS) == MENU_BALL_PURPLE
+def check_for_menu():
+    return pyautogui.pixel(*MENU_BALL_POS) == MENU_BALL_PURPLE
         
 
 def wait_for_player():

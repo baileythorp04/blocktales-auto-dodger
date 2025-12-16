@@ -1,26 +1,38 @@
-import mss
 from constants import *
+import pyautogui
 
 class Dots:
-    dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
-    line = LOG_BACKGROUND
+    new_dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
+    old_dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
+    new_line = LOG_BACKGROUND
+    old_line = LOG_BACKGROUND
     has_4_dots = False
 
     def reset(self):
-        self.dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
-        self.line = LOG_BACKGROUND
+        self.new_dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
+        self.old_dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
+        self.new_line = LOG_BACKGROUND
+        self.old_line = LOG_BACKGROUND
         self.has_4_dots = False
 
+    def scan_dots(self):
+        for i in range(4):
+            self.new_dots[i] = pyautogui.pixel(*LOG_DOT_POSES[i])
+        self.new_line = pyautogui.pixel(*LOG_LINECHECK_POS)
 
-    def check_for_dot_change(self, img: mss):
+    def check_for_dot_change(self):
+        res = self.cfdc_logic()
+        self.old_dots = self.new_dots
+        self.old_line = self.new_line
+        return res
+
+    def cfdc_logic(self):
         #if the log is not full with 4 lines, check each one to see if it turned gray
         if (not self.has_4_dots):
             for i in range(4):
-                new_color = img.pixel(*LOG_DOT_POSES[i])
-                if (self.dots[i] != new_color): #update each dot to the newest color
-                    self.dots[i] = new_color
+                if (self.old_dots[i] != self.new_dots[i]): #update each dot to the newest color
 
-                    if (new_color == LOG_GRAY):
+                    if (self.new_dots[i] == LOG_GRAY):
                         if (i == 3):
                             self.has_4_dots = True
 
@@ -32,16 +44,9 @@ class Dots:
                             return True
         #else, only check the last dot
         else:
-            new_dot_color = img.pixel(*LOG_DOT_POSES[3])
-            old_dot_color = self.dots[3]
-            self.dots[3] = new_dot_color
-
-            new_line_color = img.pixel(*LOG_LINECHECK_POS)
-            old_line_color = self.line
-            self.line = new_line_color
 
             #if dot is gray AND:
             #dot had just changed to gray OR line had just turned into background (line disappeared)
-            if (new_dot_color == LOG_GRAY and ((old_dot_color != LOG_GRAY) or (old_line_color != LOG_BACKGROUND and new_line_color == LOG_BACKGROUND))):
+            if (self.new_dots[3] == LOG_GRAY and ((self.old_dots[3] != LOG_GRAY) or (self.old_line != LOG_BACKGROUND and self.new_line == LOG_BACKGROUND))):
                 print("dot found")
                 return True

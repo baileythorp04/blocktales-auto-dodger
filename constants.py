@@ -1,6 +1,6 @@
 ### SETTINGS ###
 DOT_DELAY_OFFSET = -3 
-SAFETY_OFFSET = -3 + (-0) #(2 more for random code slowness)
+SAFETY_OFFSET = -3 + (-0.5) #mss consistently takes 0.0155 - 0.0170 seconds (about 0.5f) to take a screenshot
 time_waiting_for_enemy_to_highlight = 4
 time_waiting_for_enemy_to_move = time_waiting_for_enemy_to_highlight + 10
 

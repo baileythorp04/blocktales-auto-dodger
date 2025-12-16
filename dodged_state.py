@@ -1,6 +1,5 @@
 import time
 import pyautogui
-import mss
 from constants import *
 from helpers import time_has_passed
 
