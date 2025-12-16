@@ -1,4 +1,4 @@
-import pyautogui
+import mss
 from constants import *
 
 class Dots:
@@ -12,11 +12,11 @@ class Dots:
         self.has_4_dots = False
 
 
-    def check_for_dot_change(self):
+    def check_for_dot_change(self, img: mss):
         #if the log is not full with 4 lines, check each one to see if it turned gray
         if (not self.has_4_dots):
             for i in range(4):
-                new_color = pyautogui.pixel(*LOG_DOT_POSES[i])
+                new_color = img.pixel(*LOG_DOT_POSES[i])
                 if (self.dots[i] != new_color): #update each dot to the newest color
                     self.dots[i] = new_color
 
@@ -32,11 +32,11 @@ class Dots:
                             return True
         #else, only check the last dot
         else:
-            new_dot_color = pyautogui.pixel(*LOG_DOT_POSES[3])
+            new_dot_color = img.pixel(*LOG_DOT_POSES[3])
             old_dot_color = self.dots[3]
             self.dots[3] = new_dot_color
 
-            new_line_color = pyautogui.pixel(*LOG_LINECHECK_POS)
+            new_line_color = img.pixel(*LOG_LINECHECK_POS)
             old_line_color = self.line
             self.line = new_line_color
 

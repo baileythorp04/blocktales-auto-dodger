@@ -1,4 +1,5 @@
 import pyautogui
+import mss
 from dots import Dots
 from dodged_state import Dodged_State
 from helpers import check_for_menu, wait_for_player
@@ -17,7 +18,7 @@ pyautogui.PAUSE = 0
 #########################
 
 
-
+monitor = {"top": 0, "left": 0, "width": 1920, "height": 1080}
 
 ### STATE ###
 dodging_walk_attacks = True #to be integrated into Dodged_State once helathbar vision is added
@@ -27,26 +28,28 @@ dodged_state = Dodged_State()
 
 wait_for_player()
 
-while True:
+with mss.mss() as sct:
+    while True:
+        img = sct.grab(monitor)
 
-    if (check_for_menu()):
-        print("menu open")
-        dots.reset()
-        dodged_state.disable()
+        if (check_for_menu(img)):
+            print("menu open")
+            dots.reset()
+            dodged_state.disable()
 
-        wait_for_player() #wait...
+            wait_for_player() #wait...
 
-        print("started looking for dot")
+            print("started looking for dot")
+
+            
+
+        if (dots.check_for_dot_change(img)):
+            print("time started")
+            dodged_state.enable()
+
+        dodged_state.do_dodge()
 
         
-
-    if (dots.check_for_dot_change()):
-        print("time started")
-        dodged_state.enable()
-
-    dodged_state.do_dodge()
-
-    
 
 
 
