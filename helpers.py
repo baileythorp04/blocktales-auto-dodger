@@ -8,10 +8,16 @@ def time_has_passed(start_time, frames):
     return time.time() >= end_time
 
 
-def check_for_menu():
-    return pyautogui.pixel(*MENU_BALL_POS) == MENU_BALL_PURPLE
+def check_for_menu(frame):
+    color = get_pixel(frame, *MENU_BALL_POS)
+    return color == MENU_BALL_PURPLE
         
 
 def wait_for_player():
     print("press q to continue")
     keyboard.wait('q')
+
+def get_pixel(frame, x, y):
+    r, g, b = frame[y, x]
+    color = (int(r), int(g), int(b))
+    return color

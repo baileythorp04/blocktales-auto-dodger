@@ -1,5 +1,6 @@
 import pyautogui
 import time
+import dxcam
 from dots import Dots
 from dodged_state import Dodged_State
 from helpers import check_for_menu, wait_for_player
@@ -16,54 +17,64 @@ pyautogui.PAUSE = 0
 #########################
 ##### START OF CODE #####
 #########################
+cam = dxcam.create()
+cam.start()
+try:
 
-
-monitor = {"top": 0, "left": 0, "width": 1920, "height": 1080}
-
-### STATE ###
-dodging_walk_attacks = True #to be integrated into Dodged_State once helathbar vision is added
-menu_open = False
-
-dots = Dots()
-dodged_state = Dodged_State()
-
-wait_for_player()
-
-
-timer = time.time()
-while True:
-    ### get duration of last loop ###
-    new_time = time.time()
-    print(f"loop took: {new_time - timer}")
-    timer = new_time
-
-    ### scan all pixels first ###
-    dots.scan_dots()
-    menu_open = check_for_menu()
-
+    ### STATE ###
     
+    timer = time.time()
 
-    ### actual logic ###
+    dodging_walk_attacks = True #to be integrated into Dodged_State once helathbar vision is added
+    menu_open = False
 
-    if (menu_open):
-        print("menu open")
-        dots.reset()
-        dodged_state.disable()
+    dots = Dots()
+    dodged_state = Dodged_State()
 
-        #wait_for_player() #wait...
 
-        print("started looking for dot")
+    wait_for_player()
+    while True:
+
+        ### scan all pixels first ###
+        frame = cam.get_latest_frame()
+        if frame is None:
+            continue # TODO not sure if only acting when a new frame happens is bad practice. 
+        dots.scan_dots(frame)
+        menu_open = check_for_menu(frame)
 
         
-
-    if (dots.check_for_dot_change()):
-        print("time started")
-        dodged_state.enable()
-
-    dodged_state.do_dodge()
+        ### get duration of last loop ###
+        new_time = time.time()
+        print(f"loop took: {new_time - timer}")
+        timer = new_time
 
         
+        
 
+        ### actual logic ###
+
+        if (menu_open):
+            print("menu open")
+            dots.reset()
+            dodged_state.disable()
+
+            #wait_for_player() #wait...
+
+            print("started looking for dot")
+
+            
+
+        if (dots.check_for_dot_change()):
+            print("time started")
+            dodged_state.enable()
+
+        dodged_state.do_dodge()
+
+            
+except KeyboardInterrupt:
+    pass
+finally:
+    cam.stop()
 
 
 # wait to be armed (on button press for now)

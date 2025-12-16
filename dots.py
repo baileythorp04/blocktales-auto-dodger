@@ -1,4 +1,5 @@
 from constants import *
+from helpers import *
 import pyautogui
 
 class Dots:
@@ -15,10 +16,10 @@ class Dots:
         self.old_line = LOG_BACKGROUND
         self.has_4_dots = False
 
-    def scan_dots(self):
+    def scan_dots(self, frame):
         for i in range(4):
-            self.new_dots[i] = pyautogui.pixel(*LOG_DOT_POSES[i])
-        self.new_line = pyautogui.pixel(*LOG_LINECHECK_POS)
+            self.new_dots[i] = get_pixel(frame, *LOG_DOT_POSES[i])
+        self.new_line = get_pixel(frame, *LOG_LINECHECK_POS)
 
     def check_for_dot_change(self):
         res = self.cfdc_logic()
