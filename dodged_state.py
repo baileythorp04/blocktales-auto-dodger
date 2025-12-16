@@ -26,7 +26,7 @@ class Dodged_State():
         if (not self.finished_dodging):
 
             if (not self.finished_barrel):
-                barrel_dodge_time = BARREL_TIMING + DELAY_4 + SAFETY_OFFSET + DOT_DELAY_OFFSET
+                barrel_dodge_time = BARREL_TIMING + WALK_DELAY_4 + SAFETY_OFFSET
                 if (time_has_passed(self.start_time, barrel_dodge_time)):
                     dodged_barrel = True
                     print(f"dodge barrel preclick: {(time.time()-self.start_time)/0.03333}")
@@ -36,7 +36,7 @@ class Dodged_State():
 
                     self.finished_barrel = True #after dodging barrel, dont do it again
 
-            single_dodge_time = SINGLE_TIMING + DELAY_4 + SAFETY_OFFSET + DOT_DELAY_OFFSET
+            single_dodge_time = SINGLE_TIMING + WALK_DELAY_4 + SAFETY_OFFSET
             if (time_has_passed(self.start_time, single_dodge_time)):
                 dodged_single = True
                 print(f"dodge single preclick: {(time.time()-self.start_time)/0.03333}")

@@ -34,31 +34,31 @@ try:
 
     wait_for_player()
     while True:
+        ### first, see if you need to dodge ###
+        dodged_state.do_dodge()
 
-        ### scan all pixels first ###
+
+        ### scan all pixels before logic ###
         frame = cam.get_latest_frame()
         if frame is None:
-            continue # TODO not sure if only acting when a new frame happens is bad practice. 
+            continue
         dots.scan_dots(frame)
         menu_open = check_for_menu(frame)
 
         
-        ### get duration of last loop ###
+        ### get time since last time screen was read ###
         new_time = time.time()
-        print(f"loop took: {new_time - timer}")
+        #print(f"loop took: {new_time - timer}")
         timer = new_time
 
         
-        
-
         ### actual logic ###
-
         if (menu_open):
             print("menu open")
             dots.reset()
             dodged_state.disable()
 
-            #wait_for_player() #wait...
+            wait_for_player() #wait...
 
             print("started looking for dot")
 
@@ -68,7 +68,6 @@ try:
             print("time started")
             dodged_state.enable()
 
-        dodged_state.do_dodge()
 
             
 except KeyboardInterrupt:

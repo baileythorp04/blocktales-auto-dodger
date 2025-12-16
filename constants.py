@@ -1,6 +1,6 @@
 ### SETTINGS ###
-DOT_DELAY_OFFSET = -3 
-SAFETY_OFFSET = -3 + (-0.5) #mss consistently takes 0.0155 - 0.0170 seconds (about 0.5f) to take a screenshot
+SAFETY_OFFSET = -3 + (-2) + (-0.5)
+#-3 for being before the hit, -2 for dot delay, -0.5 for click delay
 time_waiting_for_enemy_to_highlight = 4
 time_waiting_for_enemy_to_move = time_waiting_for_enemy_to_highlight + 10
 
@@ -31,13 +31,13 @@ SWORD_START_POS = (703, 745)
 SWORD_END_POS = (1216, 745)
 MENU_BALL_POS = (125,115)
 
-BARREL_TIMING = 90 #(CHANGED FROM 91)
+BARREL_TIMING = 91
 SINGLE_TIMING = 112
 TRIPLE_1_TIMING =  82
 TRIPLE_2_TIMING = 97
 TRIPLE_3_TIMING = 109
 
-DELAY_1 = 0
-DELAY_2 = 1
-DELAY_3 = 4
-DELAY_4 = 9
+WALK_DELAY_1 = 0
+WALK_DELAY_2 = 1
+WALK_DELAY_3 = 4
+WALK_DELAY_4 = 9

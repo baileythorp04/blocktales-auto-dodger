@@ -18,13 +18,13 @@ class Dots:
 
     def scan_dots(self, frame):
         for i in range(4):
-            self.new_dots[i] = get_pixel(frame, *LOG_DOT_POSES[i])
+            self.new_dots[i] = get_pixel(frame, *(LOG_DOT_POSES[i]))
         self.new_line = get_pixel(frame, *LOG_LINECHECK_POS)
 
     def check_for_dot_change(self):
         res = self.cfdc_logic()
-        self.old_dots = self.new_dots
-        self.old_line = self.new_line
+        self.old_dots = tuple(self.new_dots)
+        self.old_line = tuple(self.new_line)
         return res
 
     def cfdc_logic(self):
@@ -32,7 +32,6 @@ class Dots:
         if (not self.has_4_dots):
             for i in range(4):
                 if (self.old_dots[i] != self.new_dots[i]): #update each dot to the newest color
-
                     if (self.new_dots[i] == LOG_GRAY):
                         if (i == 3):
                             self.has_4_dots = True
