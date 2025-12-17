@@ -6,6 +6,8 @@ from helpers import *
 
 class Dodged_State():
     start_time = 0
+    field = Battlefield()
+
 
     in_place_health_bars = [True, True, True, True]
     waiting_to_check_walking = False
@@ -23,7 +25,7 @@ class Dodged_State():
 
         self.in_place_health_bars = [True, True, True, True]
         self.waiting_to_check_walking = True
-        self.active_enemy_position = -1
+        self.active_enemy_position = self.field.get_next_enemy_position()
         self.active_enemy_is_walking = False
 
         self.next_triple_no = 0
@@ -32,6 +34,7 @@ class Dodged_State():
 
     def disable(self):
         self.finished_dodging = True
+        self.field.reset_attacks()
 
     def do_dodge(self, name, expected_time):
         print(f"dodge {name} preclick: {(time.time()-self.start_time)/0.03333}")
@@ -69,15 +72,6 @@ class Dodged_State():
             bar_visible = color == HEALTH_RED or color == HEALTH_YELLOW 
             self.in_place_health_bars[i] = bar_visible
 
-    def check_active_enemy(self):
-        if (self.active_enemy_position == -1):
-            if (time_has_passed(self.start_time, ENEMY_HIGHLIGHT_TIME)):
-                for i in range(4):
-                    if (self.in_place_health_bars[i] == True):
-                        self.active_enemy_position = i
-                        print(f"active enemy found: position {i}")
-
-
     def check_walk(self):
         if (self.waiting_to_check_walking):
             if (time_has_passed(self.start_time, ENEMY_MOVE_TIME)):
@@ -87,7 +81,3 @@ class Dodged_State():
                 else:
                     self.active_enemy_is_walking = True
                     print("detected enemy walking")
-
-
-
-    

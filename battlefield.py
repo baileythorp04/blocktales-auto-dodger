@@ -1,15 +1,11 @@
 from helpers import *
 
 class Battlefield():
-    enemy_places = [False, False, False, True]
+    enemy_places = ["trotter", "trotter", "trotter", "empty"] 
     attacks_done_this_turn = 0
 
-    def __init__(self):
-        doing_pit = False
-        if (doing_pit):
-            self.enemy_places = ["trotter", "trotter", "trotter", "empty"] 
-        else:
-            self.enemy_places = ["empty", "empty", "empty", "trotter"] 
+    def reset_attacks(self):
+        self.attacks_done_this_turn = 0
 
     def get_next_enemy_position(self):
 
@@ -22,6 +18,7 @@ class Battlefield():
             
             if (attack_counter > self.attacks_done_this_turn):
                 self.attacks_done_this_turn += 1
+                print(f"dodging enemy position: {i}")
                 return i
             
         #failsafe

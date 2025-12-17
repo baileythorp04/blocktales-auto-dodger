@@ -53,7 +53,7 @@ try:
         #print(f"loop took: {new_time - timer}")
         timer = new_time
     
-    
+
         ### choose if menu should open or close ###
         res = menu.set_openness(menu_open)
         if (res == "just opened"):
@@ -67,7 +67,6 @@ try:
                 print("time started")
                 dodger.enable()
             
-            dodger.check_active_enemy()
             dodger.check_walk()
 
 

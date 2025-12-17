@@ -2,7 +2,9 @@
 SAFETY_OFFSET = -3 + (-1) + (-0.5)
 #-3 for being before the hit, -1 for dot delay, -0.5 for click delay
 ENEMY_HIGHLIGHT_TIME = 4 + 1 # +1 for safety
-ENEMY_MOVE_TIME = ENEMY_HIGHLIGHT_TIME + 10 - 1
+zoom_out_after_prep_time = 30
+#ENEMY_MOVE_TIME = ENEMY_HIGHLIGHT_TIME + 10 - 1
+ENEMY_MOVE_TIME = zoom_out_after_prep_time
 
 
 ### CONSTANTS ###
