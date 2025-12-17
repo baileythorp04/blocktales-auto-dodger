@@ -5,6 +5,7 @@ import pyautogui
 class Dots:
     new_dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
     old_dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
+    nobody_came_pixels = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
     new_line = LOG_BACKGROUND
     old_line = LOG_BACKGROUND
     has_4_dots = False
@@ -12,6 +13,7 @@ class Dots:
     def reset(self):
         self.new_dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
         self.old_dots = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
+        nobody_came_pixels = [(0,0,0), (0,0,0), (0,0,0), (0,0,0)]
         self.new_line = LOG_BACKGROUND
         self.old_line = LOG_BACKGROUND
         self.has_4_dots = False
@@ -19,6 +21,7 @@ class Dots:
     def scan_dots(self, frame):
         for i in range(4):
             self.new_dots[i] = get_pixel(frame, *(LOG_DOT_POSES[i]))
+            self.nobody_came_pixels[i] = get_pixel(frame, *(NOBODY_CAME_POSES[i]))
         self.new_line = get_pixel(frame, *LOG_LINECHECK_POS)
 
     def check_for_dot_change(self):
@@ -39,6 +42,9 @@ class Dots:
                         if (i == 0):
                             print("player's dot found")
                             return False
+                        if (self.nobody_came_pixels[i] == LOG_GRAY):
+                            print("found dot found with failed summon")
+                            return False
                         else:
                             print("dot found")
                             return True
@@ -48,5 +54,10 @@ class Dots:
             #if dot is gray AND:
             #dot had just changed to gray OR line had just turned into background (line disappeared)
             if (self.new_dots[3] == LOG_GRAY and ((self.old_dots[3] != LOG_GRAY) or (self.old_line != LOG_BACKGROUND and self.new_line == LOG_BACKGROUND))):
+
+                if (self.nobody_came_pixels[3] == LOG_GRAY):
+                    print("found dot found with failed summon")
+                    return False
+                
                 print("dot found")
                 return True
