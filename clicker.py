@@ -1,6 +1,7 @@
 import pyautogui
 import time
 import dxcam
+from keyboard import add_hotkey
 from menu import Menu
 from dots import Dots
 from dodged_state import Dodged_State
@@ -33,6 +34,15 @@ try:
     menu = Menu()
     dots = Dots()
     dodger = Dodged_State()
+
+    add_hotkey("ctrl+1", dodger.field.remove_enemy, args=[0])
+    add_hotkey("ctrl+2", dodger.field.remove_enemy, args=[1])
+    add_hotkey("ctrl+3", dodger.field.remove_enemy, args=[2])
+    add_hotkey("ctrl+4", dodger.field.remove_enemy, args=[3])
+    add_hotkey("shift+1", dodger.field.add_ghost, args=[0])
+    add_hotkey("shift+2", dodger.field.add_ghost, args=[1])
+    add_hotkey("shift+3", dodger.field.add_ghost, args=[2])
+    add_hotkey("shift+4", dodger.field.add_ghost, args=[3])
 
     while True:
         ### first, see if you need to dodge ###

@@ -22,7 +22,23 @@ class Battlefield():
                 return i
             
         #failsafe
+        print("ran out of enemies. giving last position")
         self.attacks_done_this_turn += 1
         return 3 
 
+    def remove_enemy(self, pos):
+        if (self.enemy_places[pos] != "empty"):
+            print(f"removed {self.enemy_places[pos]} from position {pos}")
+            self.enemy_places[pos] = "empty"
+        else:
+            print(f"couldn't remove. no enemy in position {pos}")
+        print(f"battlefield is now {self.enemy_places}")
 
+    def add_ghost(self, pos):
+        if (self.enemy_places[pos] == "empty"):
+            print(f"added ghost to position {pos}")
+            self.enemy_places[pos] = "ghost"
+        else:
+            print(f"couldn't summon, {self.enemy_places[pos]} already at position {pos}")
+        print(f"battlefield is now {self.enemy_places}")
+        

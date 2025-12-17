@@ -81,3 +81,4 @@ class Dodged_State():
                 else:
                     self.active_enemy_is_walking = True
                     print("detected enemy walking")
+    
